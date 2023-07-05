@@ -1,6 +1,6 @@
 .App {
   height: 100vh;
-  background-color: rgb(20, 20, 20);
+  background-color: whitesmoke;
   text-align: center;
   overflow: hidden;
 }
@@ -8,15 +8,15 @@
 .gif-image {
   max-width: 300px;
   max-height: 300px;
- }
- 
+}
+
 .container {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 0 30px 0 30px;
-  color: white;
+  color: black;
   position: relative;
 }
 
@@ -44,12 +44,11 @@
   -webkit-text-fill-color: transparent;
 }
 
-.button-container{
+.button-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  
 }
 .cta-button {
   height: 45px;
@@ -84,7 +83,7 @@ button:disabled {
   color: #333;
 }
 
-.item-image{
+.item-image {
   height: 100px;
 }
 
@@ -108,10 +107,10 @@ button:disabled {
 .footer-text {
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  color: black;
 }
 
-.connected-container input[type='text'] {
+.connected-container input[type="text"] {
   display: inline-block;
   padding: 10px;
   width: 50%;
@@ -148,7 +147,7 @@ button:disabled {
   cursor: pointer;
 }
 
-.create-product-button{
+.create-product-button {
   margin: 10px;
   border: 0;
   font-size: 20px;
@@ -157,14 +156,15 @@ button:disabled {
   top: 20px;
   right: 20px;
   cursor: pointer;
-  color:white;
+  color: white;
   background-color: transparent;
   transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   z-index: 1;
 }
 
-.products-container{
+.products-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -218,7 +218,7 @@ button:disabled {
   }
 
   .sub-text {
-    font-size:1rem;
+    font-size: 1rem;
   }
 
   .footer-container {
