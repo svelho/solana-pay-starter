@@ -2,6 +2,8 @@ import React from "react";
 import HeadComponent from "../components/Head";
 import { PublicKey } from "@solana/web3.js";
 import { useWallet } from "@solana/wallet-adapter-react";
+import { useState, useEffect } from "react";
+import Product from "../components/Product";
 import {
   WalletMultiButton,
   WalletDisconnectButton,
@@ -14,6 +16,19 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 const App = () => {
   // Isso buscará a chave pública dos usuários (endereço da carteira) de qualquer carteira que suportamos
   const { publicKey } = useWallet();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    if (publicKey) {
+      fetch(`/api/fetchProducts`)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setProducts(data);
+          console.log("Products", data);
+        });
+    }
+  }, [publicKey]);
 
   const renderNotConnectedContainer = () => (
     <div>
@@ -22,6 +37,14 @@ const App = () => {
       <div className="button-container">
         <WalletMultiButton className="cta-button connect-wallet-button" />
       </div>
+    </div>
+  );
+
+  const renderItemBuyContainer = () => (
+    <div className="products-container">
+      {products.map((product) => (
+        <Product key={product.id} product={product} />
+      ))}
     </div>
   );
 
@@ -37,7 +60,7 @@ const App = () => {
         <br />
         <main>
           {/* Nós só renderizamos o botão de conexão se a chave pública não existir */}
-          {publicKey ? "Conectado!" : renderNotConnectedContainer()}
+          {publicKey ? renderItemBuyContainer() : renderNotConnectedContainer()}
 
           <div className="button-container">
             <WalletDisconnectButton className="cta-button connect-wallet-button" />
