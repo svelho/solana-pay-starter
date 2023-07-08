@@ -5,6 +5,7 @@ import Buy from "./Buy";
 
 export default function Product({ product }) {
   const { id, name, price, description, image_url } = product;
+  console.log("ola id", id);
 
   return (
     <div className={styles.product_container}>
@@ -20,7 +21,7 @@ export default function Product({ product }) {
 
         <div className={styles.product_action}>
           <div className={styles.product_price}>{price} USDC</div>
-          <Buy itemId={id} />
+          <Buy itemID={id} />
           {/* Estou usando um código rígido. Isto por enquanto. Vamos buscar o hash da API mais tarde.*/}
           {/* <IPFSDownload
             filename="BROADREAM-S9-blue.jpg"

@@ -23,6 +23,7 @@ export default function Buy({ itemID }) {
     [publicKey, orderID, itemID]
   );
 
+  console.log("order!", order);
   // Pegue o objeto transação do servidor
   const processTransaction = async () => {
     setLoading(true);
@@ -72,9 +73,9 @@ export default function Buy({ itemID }) {
     <div>
       {paid ? (
         <IPFSDownload
-          filename="emojis.zip"
-          hash="QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5"
-          cta="Download emojis"
+          filename="BROADREAM-S9-blue.jpg"
+          hash="QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
+          cta="Download drone picture"
         />
       ) : (
         <button

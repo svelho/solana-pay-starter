@@ -33,6 +33,12 @@ const createTransaction = async (req, res) => {
       });
     }
 
+    if (!itemID) {
+      return res.status(400).json({
+        message: "Missing item ID",
+      });
+    }
+
     // Pegue o preço do item de products.json usando itemID
     const itemPrice = products.find((item) => item.id === itemID).price;
 
@@ -90,7 +96,7 @@ const createTransaction = async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({ error: "error creating txx" });
+    res.status(500).json({ error: "error creating tx" });
     return;
   }
 };
