@@ -11,13 +11,14 @@ import BigNumber from "bignumber.js";
 import products from "./products.json";
 
 // Certifique-se de substituir isto pelo endereço de sua carteira!
-const sellerAddress = "B1aLAAe4vW8nSQCetXnYqJfRxzTjnbooczwkUJAr7yMS";
+const sellerAddress = "BVwUx9MruKKnbKRMqPtcq3kqtWArye44WCnEFSPeHcVQ";
 const sellerPublicKey = new PublicKey(sellerAddress);
 
 const createTransaction = async (req, res) => {
   try {
     // Extraia os dados da transação do órgão solicitante
     const { buyer, orderID, itemID } = req.body;
+    console.log("createTransation", buyer, orderID, itemID);
 
     // Se não tivermos algo que precisamos, paramos!
     if (!buyer) {
@@ -89,7 +90,7 @@ const createTransaction = async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({ error: "error creating tx" });
+    res.status(500).json({ error: "error creating txx" });
     return;
   }
 };
