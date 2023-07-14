@@ -5,7 +5,6 @@ import Buy from "./Buy";
 
 export default function Product({ product }) {
   const { id, name, price, description, image_url } = product;
-  console.log("ola id", id);
 
   return (
     <div className={styles.product_container}>

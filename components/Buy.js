@@ -1,8 +1,16 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { findReference, FindReferenceError } from "@solana/pay";
 import { Keypair, Transaction } from "@solana/web3.js";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { InfinitySpin } from "react-loader-spinner";
 import IPFSDownload from "./IpfsDownload";
+import { addOrder, hasPurchased, fetchItem } from "../lib/api";
+
+const STATUS = {
+  Initial: "Initial",
+  Submitted: "Submitted",
+  Paid: "Paid",
+};
 
 export default function Buy({ itemID }) {
   const { connection } = useConnection();
@@ -11,9 +19,10 @@ export default function Buy({ itemID }) {
 
   const [paid, setPaid] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state of all above
+  const [status, setStatus] = useState(STATUS.Initial); // Acompanhamento do status da transação
+  const [item, setItem] = useState(null); // hash IPFS & nome do arquivo do item comprado
 
   // useMemo é um gancho do React que só computa o valor se as dependências mudarem
-
   const order = useMemo(
     () => ({
       buyer: publicKey.toString(),
@@ -23,7 +32,6 @@ export default function Buy({ itemID }) {
     [publicKey, orderID, itemID]
   );
 
-  console.log("order!", order);
   // Pegue o objeto transação do servidor
   const processTransaction = async () => {
     setLoading(true);
@@ -37,7 +45,7 @@ export default function Buy({ itemID }) {
     const txData = await txResponse.json();
 
     // Nós criamos um objeto transação
-    console.log(txData);
+    console.log("chegou", txData);
     const tx = Transaction.from(Buffer.from(txData.transaction, "base64"));
     console.log("Tx data is", tx);
 
@@ -48,14 +56,75 @@ export default function Buy({ itemID }) {
       console.log(
         `Transação enviada: https://solscan.io/tx/${txHash}?cluster=devnet`
       );
+      setStatus(STATUS.Submitted);
       // Mesmo que isso possa falhar, por ora, vamos apenas torná-lo realidade
-      setPaid(true);
+      //setPaid(true);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Verificar se este endereço já comprou este item
+    // Se for o caso, buscar o item e ajustar o pagamento para verdadeiro
+    // Função Async para evitar o bloqueio da IU
+    async function checkPurchased() {
+      const purchased = await hasPurchased(publicKey, itemID);
+      if (purchased) {
+        setStatus(STATUS.Paid);
+        const item = await fetchItem(itemID);
+        setItem(item);
+      }
+    }
+    checkPurchased();
+  }, [publicKey, itemID]);
+
+  useEffect(() => {
+    // Verifique se a transação foi confirmada
+    if (status === STATUS.Submitted) {
+      setLoading(true);
+      const interval = setInterval(async () => {
+        try {
+          const result = await findReference(connection, orderID);
+          console.log(
+            "Encontrando referência da tx",
+            result.confirmationStatus
+          );
+          if (
+            result.confirmationStatus === "confirmed" ||
+            result.confirmationStatus === "finalized"
+          ) {
+            clearInterval(interval);
+            setStatus(STATUS.Paid);
+            addOrder(order);
+            setLoading(false);
+            alert("Obrigado por sua compra!");
+          }
+        } catch (e) {
+          if (e instanceof FindReferenceError) {
+            return null;
+          }
+          console.error("Erro desconhecido", e);
+        } finally {
+          setLoading(false);
+        }
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+
+    async function getItem(itemID) {
+      const item = await fetchItem(itemID);
+      setItem(item);
+    }
+
+    if (status === STATUS.Paid) {
+      getItem(itemID);
+    }
+  }, [status]);
 
   if (!publicKey) {
     return (
@@ -71,10 +140,11 @@ export default function Buy({ itemID }) {
 
   return (
     <div>
-      {paid ? (
+      {/* Exibir ou o botão de compra ou o componente IPFSDownload com base na existência de Hash */}
+      {item ? (
         <IPFSDownload
-          filename="BROADREAM-S9-blue.jpg"
-          hash="QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
+          filename={item.filename}
+          hash={item.hash}
           cta="Download drone picture"
         />
       ) : (
@@ -83,7 +153,7 @@ export default function Buy({ itemID }) {
           className="buy-button"
           onClick={processTransaction}
         >
-          Compre agora
+          Compre Agora 🛒
         </button>
       )}
     </div>

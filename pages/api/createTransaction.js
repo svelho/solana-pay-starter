@@ -7,11 +7,20 @@ import {
   SystemProgram,
   LAMPORTS_PER_SOL,
 } from "@solana/web3.js";
+import {
+  createTransferCheckedInstruction,
+  getAssociatedTokenAddress,
+  getMint,
+} from "@solana/spl-token";
 import BigNumber from "bignumber.js";
 import products from "./products.json";
 
+const usdcAddress = new PublicKey(
+  "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
+);
 // Certifique-se de substituir isto pelo endereço de sua carteira!
-const sellerAddress = "BVwUx9MruKKnbKRMqPtcq3kqtWArye44WCnEFSPeHcVQ";
+const sellerAddress = "FhrVB7Wr95UTPQR11stX8Lqf5at5RwK9cXsy9bCW85Cq";
+
 const sellerPublicKey = new PublicKey(sellerAddress);
 
 const createTransaction = async (req, res) => {
@@ -55,8 +64,19 @@ const createTransaction = async (req, res) => {
     const endpoint = clusterApiUrl(network);
     const connection = new Connection(endpoint);
 
+    const buyerUsdcAddress = await getAssociatedTokenAddress(
+      usdcAddress,
+      buyerPublicKey
+    );
+    const shopUsdcAddress = await getAssociatedTokenAddress(
+      usdcAddress,
+      sellerPublicKey
+    );
     //Um blockhash (hash de bloco) é como uma identificação para um bloco. Ele permite que você identifique cada bloco.
     const { blockhash } = await connection.getLatestBlockhash("finalized");
+
+    // Isto é novo, estamos recebendo o endereço da cunhagem do token que queremos transferir
+    const usdcMint = await getMint(connection, usdcAddress);
 
     // As duas primeiras coisas que precisamos - uma identificação recente do bloco
     // e a chave pública do pagador da taxa
@@ -65,14 +85,24 @@ const createTransaction = async (req, res) => {
       feePayer: buyerPublicKey,
     });
 
-    // Esta é a "ação" que a transação realizará
-    // Vamos apenas transferir algum SOL
-    const transferInstruction = SystemProgram.transfer({
-      fromPubkey: buyerPublicKey,
-      // Lamports são a menor unidade do SOL, como a Gwei é da Ethereum
-      lamports: bigAmount.multipliedBy(LAMPORTS_PER_SOL).toNumber(),
-      toPubkey: sellerPublicKey,
-    });
+    // // Esta é a "ação" que a transação realizará
+    // // Vamos apenas transferir algum SOL
+    // const transferInstruction = SystemProgram.transfer({
+    //   fromPubkey: buyerPublicKey,
+    //   // Lamports são a menor unidade do SOL, como a Gwei é da Ethereum
+    //   lamports: bigAmount.multipliedBy(LAMPORTS_PER_SOL).toNumber(),
+    //   toPubkey: sellerPublicKey,
+    // });
+    console.log("chegou2");
+    // Aqui estamos criando um tipo diferente de instrução de transferência
+    const transferInstruction = createTransferCheckedInstruction(
+      buyerUsdcAddress,
+      usdcAddress, // Este é o endereço do token que queremos transferir
+      shopUsdcAddress,
+      buyerPublicKey,
+      bigAmount.toNumber() * 10 ** (await usdcMint).decimals,
+      usdcMint.decimals // O token pode ter qualquer número de decimais
+    );
 
     // Estamos acrescentando mais instruções à transação
     transferInstruction.keys.push({
