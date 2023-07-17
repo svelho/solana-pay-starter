@@ -16,20 +16,22 @@ export default function Buy({ itemID }) {
   const { connection } = useConnection();
   const { publicKey, sendTransaction } = useWallet();
   const orderID = useMemo(() => Keypair.generate().publicKey, []); // Public key used to identify the order
+  let currency = "sol";
 
-  const [paid, setPaid] = useState(null);
+  //const [paid, setPaid] = useState(null);
   const [loading, setLoading] = useState(false); // Loading state of all above
   const [status, setStatus] = useState(STATUS.Initial); // Acompanhamento do status da transação
   const [item, setItem] = useState(null); // hash IPFS & nome do arquivo do item comprado
 
-  // useMemo é um gancho do React que só computa o valor se as dependências mudarem
-  const order = useMemo(
+  // // useMemo é um gancho do React que só computa o valor se as dependências mudarem
+  var order = useMemo(
     () => ({
       buyer: publicKey.toString(),
       orderID: orderID.toString(),
       itemID: itemID,
+      currency: currency,
     }),
-    [publicKey, orderID, itemID]
+    [publicKey, orderID, itemID, currency]
   );
 
   // Pegue o objeto transação do servidor
@@ -53,8 +55,11 @@ export default function Buy({ itemID }) {
     try {
       // Envie a transação para a rede
       const txHash = await sendTransaction(tx, connection);
+      // console.log(
+      //   `Transação enviada: https://solscan.io/tx/${txHash}?cluster=devnet`
+      // );
       console.log(
-        `Transação enviada: https://solscan.io/tx/${txHash}?cluster=devnet`
+        `Transação enviada: https://solscan.io/tx/${txHash}?cluster=mainnet`
       );
       setStatus(STATUS.Submitted);
       // Mesmo que isso possa falhar, por ora, vamos apenas torná-lo realidade
@@ -88,6 +93,7 @@ export default function Buy({ itemID }) {
       const interval = setInterval(async () => {
         try {
           const result = await findReference(connection, orderID);
+          console.log(result);
           console.log(
             "Encontrando referência da tx",
             result.confirmationStatus
@@ -105,8 +111,10 @@ export default function Buy({ itemID }) {
         } catch (e) {
           if (e instanceof FindReferenceError) {
             return null;
+          } else {
+            console.error("Erro desconhecido", e);
+            clearInterval(interval);
           }
-          console.error("Erro desconhecido", e);
         } finally {
           setLoading(false);
         }
@@ -151,7 +159,15 @@ export default function Buy({ itemID }) {
         <button
           disabled={loading}
           className="buy-button"
-          onClick={processTransaction}
+          onClick={() => {
+            const confirmBox = window.confirm("Deseja pagar em solana?");
+            if (confirmBox === true) {
+              order.currency = "sol";
+            } else {
+              order.currency = "usdc";
+            }
+            processTransaction();
+          }}
         >
           Compre Agora 🛒
         </button>

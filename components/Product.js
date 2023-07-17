@@ -4,7 +4,7 @@ import IPFSDownload from "./IpfsDownload";
 import Buy from "./Buy";
 
 export default function Product({ product }) {
-  const { id, name, price, description, image_url } = product;
+  const { id, name, price, priceSol, description, image_url } = product;
 
   return (
     <div className={styles.product_container}>
@@ -20,14 +20,18 @@ export default function Product({ product }) {
 
         <div className={styles.product_action}>
           <div className={styles.product_price}>{price} USDC</div>
+          <div className={styles.product_price}>{priceSol} SOL</div>
 
-          <Buy itemID={id} />
           {/* Estou usando um código rígido. Isto por enquanto. Vamos buscar o hash da API mais tarde.*/}
           {/* <IPFSDownload
             filename="BROADREAM-S9-blue.jpg"
             hash="QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
             cta="Download emojis"
           /> */}
+        </div>
+        <br />
+        <div>
+          <Buy itemID={id} />
         </div>
       </div>
     </div>
