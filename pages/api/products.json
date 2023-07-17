@@ -7,5 +7,14 @@
     "image_url": "minidrone.png",
     "filename": "droneS9.zip",
     "hash": "QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
+  },
+  {
+    "id": 2,
+    "name": "droneB16",
+    "price": "0.3",
+    "image_url": "minidroneB16.png",
+    "description": "Drone capaz de controlar por 2 kilometros",
+    "filename": "droneB16.png",
+    "hash": "QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
   }
 ]

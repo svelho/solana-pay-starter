@@ -16,10 +16,10 @@ import BigNumber from "bignumber.js";
 import products from "./products.json";
 
 const usdcAddress = new PublicKey(
-  "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
+  "BVwUx9MruKKnbKRMqPtcq3kqtWArye44WCnEFSPeHcVQ"
 );
 // Certifique-se de substituir isto pelo endereço de sua carteira!
-const sellerAddress = "FhrVB7Wr95UTPQR11stX8Lqf5at5RwK9cXsy9bCW85Cq";
+const sellerAddress = "BVwUx9MruKKnbKRMqPtcq3kqtWArye44WCnEFSPeHcVQ";
 
 const sellerPublicKey = new PublicKey(sellerAddress);
 
@@ -60,7 +60,8 @@ const createTransaction = async (req, res) => {
     // Converta nosso preço para o formato correto
     const bigAmount = BigNumber(itemPrice);
     const buyerPublicKey = new PublicKey(buyer);
-    const network = WalletAdapterNetwork.Devnet;
+    //const network = WalletAdapterNetwork.Devnet;
+    const network = WalletAdapterNetwork.Mainnet;
     const endpoint = clusterApiUrl(network);
     const connection = new Connection(endpoint);
 
