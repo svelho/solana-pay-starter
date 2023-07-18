@@ -11,7 +11,7 @@ import {
 import CreateProduct from "../components/CreateProduct";
 
 // Constants
-const TWITTER_HANDLE = "_web3dev";
+const TWITTER_HANDLE = "SauloVelho";
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
@@ -93,7 +93,7 @@ const App = () => {
             href={TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          >{`construido na @${TWITTER_HANDLE}`}</a>
+          >{`construido por @${TWITTER_HANDLE}`}</a>
         </div>
       </div>
     </div>

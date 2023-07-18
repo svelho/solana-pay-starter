@@ -55,12 +55,12 @@ export default function Buy({ itemID }) {
     try {
       // Envie a transação para a rede
       const txHash = await sendTransaction(tx, connection);
-      // console.log(
-      //   `Transação enviada: https://solscan.io/tx/${txHash}?cluster=devnet`
-      // );
       console.log(
-        `Transação enviada: https://solscan.io/tx/${txHash}?cluster=mainnet`
+        `Transação enviada: https://solscan.io/tx/${txHash}?cluster=devnet`
       );
+      // console.log(
+      //   `Transação enviada: https://solscan.io/tx/${txHash}?cluster=mainnet`
+      // );
       setStatus(STATUS.Submitted);
       // Mesmo que isso possa falhar, por ora, vamos apenas torná-lo realidade
       //setPaid(true);
@@ -88,12 +88,13 @@ export default function Buy({ itemID }) {
 
   useEffect(() => {
     // Verifique se a transação foi confirmada
-    if (status === STATUS.Submitted) {
+    if (status == STATUS.Submitted) {
       setLoading(true);
       const interval = setInterval(async () => {
         try {
+          console.log("buscando referencia");
           const result = await findReference(connection, orderID);
-          console.log(result);
+          console.log("chegou aqui", result);
           console.log(
             "Encontrando referência da tx",
             result.confirmationStatus
@@ -110,6 +111,7 @@ export default function Buy({ itemID }) {
           }
         } catch (e) {
           if (e instanceof FindReferenceError) {
+            console.log("FindReferenceError");
             return null;
           } else {
             console.error("Erro desconhecido", e);

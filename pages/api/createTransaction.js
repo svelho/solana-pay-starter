@@ -71,8 +71,8 @@ const createTransaction = async (req, res) => {
     // Converta nosso preço para o formato correto
     const bigAmount = BigNumber(itemPrice);
     const buyerPublicKey = new PublicKey(buyer);
-    //const network = WalletAdapterNetwork.Devnet;
-    const network = WalletAdapterNetwork.Mainnet;
+    const network = WalletAdapterNetwork.Devnet;
+    //const network = WalletAdapterNetwork.Mainnet;
     const endpoint = clusterApiUrl(network);
     const connection = new Connection(endpoint);
     console.log("chegou 3");
@@ -88,7 +88,8 @@ const createTransaction = async (req, res) => {
     const { blockhash } = await connection.getLatestBlockhash("finalized");
     console.log("chegou 4");
     // Isto é novo, estamos recebendo o endereço da cunhagem do token que queremos transferir //general erros //TokenInvalidAccountOwnerError
-    const usdcMint = await getMint(connection, usdcAddress);
+    let usdcMint;
+    if (currency != "sol") usdcMint = await getMint(connection, usdcAddress);
 
     // As duas primeiras coisas que precisamos - uma identificação recente do bloco
     // e a chave pública do pagador da taxa
