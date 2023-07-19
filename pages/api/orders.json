@@ -1,13 +1,1 @@
-[
-  {
-    "buyer": "FhrVB7Wr95UTPQR11stX8Lqf5at5RwK9cXsy9bCW85Cq",
-    "orderID": "Dsz4nDzSCFZ7YgWx3m5CPvNz1s7Q94yQNJUESrkmyYSh",
-    "itemID": 2
-  },
-  {
-    "buyer": "FhrVB7Wr95UTPQR11stX8Lqf5at5RwK9cXsy9bCW85Cq",
-    "orderID": "EBdX8gS6HmQDUy4ado5e7B7yqdwqWR3Tr24qLPSc6mG8",
-    "itemID": 1,
-    "currency": "sol"
-  }
-]
+[]

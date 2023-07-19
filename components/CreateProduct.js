@@ -54,9 +54,9 @@ const CreateProduct = () => {
     <div className={styles.background_blur}>
       <div className={styles.create_product_container}>
         <div className={styles.create_product_form}>
-          <header className={styles.header}>
+          {/* <header className={styles.header}>
             <h1>Criar Produto</h1>
-          </header>
+          </header> */}
 
           <div className={styles.form_container}>
             <input

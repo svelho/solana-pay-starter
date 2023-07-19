@@ -56,20 +56,11 @@ const App = () => {
       <HeadComponent />
       <div className="container">
         <header className="header-container">
-          <p className="header">Loja de Drones</p>
-          <p className="sub-text">Aceitamos Criptomoeda</p>
+          {/* <p className="header">Drone Shop</p> */}
+          <img className="gif-image" src="droneShop.png" alt="emoji" />
+          <p className="sub-title">Aceitamos Criptomoedas</p>
 
-          <img src="solana.png" />
-          <br />
-          <br />
-          {isOwner && (
-            <button
-              className="download-button"
-              onClick={() => setCreating(!creating)}
-            >
-              {creating ? "Close" : "Criar Produto"}
-            </button>
-          )}
+          <img className="coin" src="solana.png" />
         </header>
         <br />
         <main>
@@ -79,6 +70,14 @@ const App = () => {
 
           <div className="button-container">
             <WalletDisconnectButton className="cta-button connect-wallet-button" />
+            {isOwner && (
+              <button
+                className="cta-button connect-wallet-button2"
+                onClick={() => setCreating(!creating)}
+              >
+                {creating ? "Close" : "Criar Produto"}
+              </button>
+            )}
           </div>
         </main>
 

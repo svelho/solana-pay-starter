@@ -171,7 +171,7 @@ export default function Buy({ itemID }) {
             processTransaction();
           }}
         >
-          Compre Agora 🛒
+          Adicionar ao Carrinho 🛒
         </button>
       )}
     </div>

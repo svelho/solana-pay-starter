@@ -11,11 +11,11 @@
   },
   {
     "id": 2,
-    "name": "droneB16",
+    "name": "Mini drone DJI Mavic",
     "price": "0.3",
     "priceSol": "0.003",
     "image_url": "minidroneB16.png",
-    "description": "Drone capaz de controlar por 2 kilometros",
+    "description": "Drone com resolução máxima da câmera 4K, vem com modo de retenção de altitude para voos estáveis e ainda possui função de retorno automático.",
     "filename": "droneB16.png",
     "hash": "QmPKUqc6DuWSvMrgTETyXDnYhgvDiU4hr5WWSHC4sdLdXg"
   }
